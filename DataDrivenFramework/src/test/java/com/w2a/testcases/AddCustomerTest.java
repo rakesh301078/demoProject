@@ -1,6 +1,10 @@
 package com.w2a.testcases;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 //import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -14,8 +18,8 @@ public class AddCustomerTest extends TestBase {
 	private static final String dataProvider = null;
 
 	@Test(dataProvider="getData")
-	public void addCustomer(String firstName, String lastName, String postCode) throws Exception {
-		//System.out.println("Add Customer Class");
+	public void addCustomer(String firstName, String lastName, String postCode, String alerttext) throws Exception {
+		System.out.println("Add Customer Class");
 		//Thread.sleep(3000);
 		driver.findElement(By.cssSelector(OR.getProperty("addCustbtn"))).click();
 	    driver.findElement(By.cssSelector(OR.getProperty("firstName"))).sendKeys(firstName);
@@ -23,7 +27,13 @@ public class AddCustomerTest extends TestBase {
 		driver.findElement(By.cssSelector(OR.getProperty("postCode"))).sendKeys(postCode);
 		driver.findElement(By.cssSelector(OR.getProperty("addbtn"))).click();
 		
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 		
+		Assert.assertTrue(alert.getText().contains(alerttext));
+		
+		alert.accept();
+		
+		Thread.sleep(3000);
 	}
 	
 	@DataProvider
